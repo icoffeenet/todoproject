@@ -1,10 +1,13 @@
 {
-  "scripts": {
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "cd note-api && npm run dev",
-    "client": "cd note-web  && npm run dev"
-  },
-  "devDependencies": {
-    "concurrently": "^9.2.0"
-  }
+    "scripts": {
+        "dev": "concurrently \"npm run server\" \"npm run client\"",
+        "server": "cd note-api && npm run dev",
+        "client": "cd note-web  && npm run dev",
+        "install": "concurrently \"npm run installserver\" \"npm run installclient\"",
+        "installserver": "cd note-api && npm install",
+        "installclient": "cd note-web  && npm install"
+    },
+    "devDependencies": {
+        "concurrently": "^9.2.0"
+    }
 }
