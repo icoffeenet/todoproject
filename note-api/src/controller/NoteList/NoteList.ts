@@ -2,14 +2,28 @@ import { Request, Response } from 'express'
 import path from 'path'
 import fs from 'fs'
 
-const filePath = path.join(__dirname, '../../note.txt')
+const filePath = path.join(__dirname, '../../../note.txt')
 
 function readNoteFile() {
-  if (!fs.existsSync(filePath)) return []
-  const content = fs.readFileSync(filePath, 'utf-8').trim()
-  if (!content) return []
-  const lines = content.split('\n').filter(Boolean)
-  return lines.map(line => JSON.parse(line))
+  if (!fs.existsSync(filePath)) return [];
+  const content = fs.readFileSync(filePath, 'utf-8').trim();
+  if (!content) return [];
+
+  const rawLines = content
+    .replace(/}\s*{/g, '}\n{') // split joined objects like {...}{...}
+    .split('\n')
+    .filter(Boolean);
+
+  const notes = [];
+  for (const line of rawLines) {
+    try {
+      notes.push(JSON.parse(line));
+    } catch (e) {
+      console.error(`Invalid JSON line: ${line}`);
+      throw e;
+    }
+  }
+  return notes;
 }
 
 function writeNoteFile(noteList: any[]) {
